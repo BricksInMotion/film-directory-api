@@ -1,4 +1,4 @@
 SELECT 1
 FROM `films`
-WHERE `films`.`id`= ?
+WHERE `films`.`id`= :id
 LIMIT 1;

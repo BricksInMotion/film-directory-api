@@ -7,5 +7,5 @@ SELECT
   `date_create` AS `release_date`,
   `user_id` AS `director_id`
 FROM `films`
-WHERE `films`.`id`= ?
+WHERE `films`.`id`= :id
 LIMIT 1;

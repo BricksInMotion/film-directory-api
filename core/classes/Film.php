@@ -14,7 +14,8 @@ class Film {
   function exists() {
     require '../core/database.php';
     $stmt = $pdo->prepare(get_sql('film-exists'));
-    $stmt->execute([$this->id]);
+    $stmt->bindValue(':id', $this->id);
+    $stmt->execute();
     return (bool) $stmt->fetch(PDO::FETCH_OBJ);
   }
 
@@ -26,8 +27,10 @@ class Film {
   function info() {
     require '../core/database.php';
     $stmt = $pdo->prepare(get_sql('film-info'));
-    $stmt->execute([$this->id]);
+    $stmt->bindValue(':id', $this->id);
+    $stmt->execute();
     return $stmt->fetch(PDO::FETCH_OBJ);
   }
+
 
 }

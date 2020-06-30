@@ -44,7 +44,8 @@ class Director {
   function exists() {
     require '../core/database.php';
     $stmt = $pdo->prepare(get_sql('director-exists'));
-    $stmt->execute([$this->id]);
+    $stmt->bindValue(':id', $this->id);
+    $stmt->execute();
     return (bool) $stmt->fetch(PDO::FETCH_OBJ);
   }
 
@@ -56,7 +57,8 @@ class Director {
   function info() {
     require '../core/database.php';
     $stmt = $pdo->prepare(get_sql('director-info'));
-    $stmt->execute([$this->id]);
+    $stmt->bindValue(':id', $this->id);
+    $stmt->execute();
     return $stmt->fetch(PDO::FETCH_OBJ);
   }
 
