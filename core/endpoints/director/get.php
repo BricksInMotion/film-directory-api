@@ -4,17 +4,16 @@
 
   // A director id was not provided
   if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-    echo make_error_response(400, 'Missing Director user ID!');
+    echo make_error_response(400, 'A Director ID must be provided!');
   }
 
-  // Get the director ID
+  // Get the director
   $director = new Director(escape_xss($_GET['id']));
 
-  // No results were found
+  // That director doesn't exist
   if ($director->exists() === false) {
     echo make_error_response(404, "Could not find Director for ID {$director->id}!");
   }
-
 
   // We have a Director and not requesting filmography, send back just their info
   if (!isset($_GET['roles'])) {
