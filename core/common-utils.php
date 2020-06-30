@@ -88,7 +88,7 @@ function get_sql($script_name) {
  * Construct an error endpoint response.
  */
 function make_error_response($code, $msg, $headers=null) {
-  make_response($code, ['msg-error' => $msg], $headers);
+  make_response($code, ['message' => $msg], $headers);
 }
 
 
