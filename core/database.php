@@ -1,7 +1,7 @@
 <?php
-  require_once 'core/common-utils.php';
+  require_once $_SERVER['DOCUMENT_ROOT'] . '/core/common-utils.php';
 
-  $db_login = get_json('.login/credentials.json');
+  $db_login = get_json($_SERVER['DOCUMENT_ROOT'] . '/.login/credentials.json');
   $dsn = "mysql:host={$db_login->host};dbname={$db_login->db};charset={$db_login->charset}";
 
   $options = [
