@@ -28,7 +28,7 @@ function register_endpoint($verb, $endpoint) {
   $response_file = "{$require_path}/{$verb_lower}.php";
 
   // A response for that verb is not available
-  if (!file_exists($response_file)){
+  if (file_exists($response_file) === false){
     make_error_response(405, "Unsupported verb {$verb}.", [generate_allow_header($require_path)]);
   }
 
@@ -65,6 +65,22 @@ function generate_allow_header($endpoint_path) {
  */
 function get_json($path) {
   return json_decode(file_get_contents($path), false);
+}
+
+
+/**
+ * Load the contents of a SQL script.
+ * Throws an Exception if the script cannot be found.
+ * @param {string} $script_name - The filename of the SQL script.
+ * @return {string} The SQL script.
+ */
+function get_sql($script_name) {
+  // Throw an exception if we can't find the script
+  $sql = $_SERVER['DOCUMENT_ROOT'] . "/core/sql/{$script_name}.sql";
+  if (file_exists($sql) === false) {
+    throw new Exception("SQL script {$script_name} does not exist!");
+  }
+  return file_get_contents($sql);
 }
 
 
