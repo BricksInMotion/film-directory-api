@@ -20,32 +20,33 @@
     echo make_response(200, $director->info());
   }
 
+  // Map the role labels to the fetch methods
+  $role_methods = [
+    'director' => 'as_director',
+    'writer'   => 'as_writer',
+    'composer' => 'as_composer',
+    'animator' => 'as_animator',
+    'editor'   => 'as_editor',
+    'vfx'      => 'as_vfx',
+    'sound'    => 'as_sound',
+    'other'    => 'as_crew',
+    'thanks'   => 'as_thanks',
+    'va'       => 'as_voice',
+  ];
+
   // We want to get the filmography
   if (isset($_GET['roles'])) {
     $roles = escape_xss($_GET['roles']);
 
     // If the roles key is given, at least one role must be requested
     if (empty($roles)) {
-      echo make_error_response(400, 'At least one Director role must be provided!');
+      $possible_vaues = implode(', ', array_keys($role_methods));
+      echo make_error_response(400, "At least one Director role must be provided! Possible values: {$possible_vaues}");
     }
 
-    // Convert it into a list
+    // Convert the requested roles into a list
     $roles = explode(',', $roles);
-
-    // Map the role labels to the fetch methods
     $filmography = [];
-    $role_methods = [
-      'director' => 'as_director',
-      'writer'   => 'as_writer',
-      'composer' => 'as_composer',
-      'animator' => 'as_animator',
-      'editor'   => 'as_editor',
-      'vfx'      => 'as_vfx',
-      'sound'    => 'as_sound',
-      'other'    => 'as_crew',
-      'thanks'   => 'as_thanks',
-      'va'       => 'as_voice',
-    ];
 
     // If a special "all" key is given, collect all the info
     if (count($roles) === 1 && $roles[0] === "all") {
