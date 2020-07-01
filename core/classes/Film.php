@@ -133,36 +133,21 @@ class Film {
     $stmt->execute();
     $warnings = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Filter out any columns that indicate no warning
-    $warnings = array_filter($warnings, function($v) {
-      return $v !== '0';
-    });
-
-    // This film has no warnings
-    // The "advisory" values are still printed on the page
-    // to indicate there are no advisories
-    $results = new stdClass();
-    if (count($warnings) === 0) {
-      $results->none = [
-        'type' => 'advisory',
-        'severity' => 'no'
-      ];
-      return $results;
-    }
-
-    // Define proper labels based on values in the db
+    // Define labels based on db values
     $types = [
       'violence' => 'violence',
       'language' => 'language',
       'sex' => 'sexual content'
     ];
     $severity = [
+      '0' => 'no',
       '1' => 'mild',
       '2' => 'moderate',
       '3' => 'strong'
     ];
 
     // Collect the film's warnings
+    $results = new stdClass();
     foreach ($warnings as $key => $value) {
       $type = $types[$key];
       $results->$type = [
