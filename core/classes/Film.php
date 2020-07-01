@@ -48,4 +48,237 @@ class Film {
     return $stmt->fetch(PDO::FETCH_OBJ);
   }
 
+  /**
+   * Get all links to the film.
+   *
+   * @return {stdClass}
+   */
+  function links() {
+    require '../core/database.php';
+    $stmt = $pdo->prepare(get_sql('film-links'));
+    $stmt->bindValue(':id', $this->id);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_OBJ);
+  }
+
+  /**
+   * Get all user reviews of the film.
+   *
+   * @return {array}
+   */
+  function reviews() {
+    require '../core/database.php';
+    $stmt = $pdo->prepare(get_sql('film-reviews'));
+    $stmt->bindValue(':id', $this->id);
+    $stmt->execute();
+    $reviews = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    // This film has no reviews, provide text that says so
+    if (count($reviews) === 0) {
+      $reviews = new stdClass();
+      $reviews->real_name = 'This film has not been reviewed';
+      $reviews->comments = '';
+
+      // We expect an array of `stdClass`es,
+      // so we need to replicate that here
+      $reviews = [$reviews];
+    }
+    return $reviews;
+  }
+
+  /**
+   * Get the film's genres.
+   *
+   * @return {array}
+   */
+  function genres() {
+    require '../core/database.php';
+    $stmt = $pdo->prepare(get_sql('film-genres'));
+    $stmt->bindValue(':id', $this->id);
+    $stmt->execute();
+    $genres = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    // This film has no assigned genres
+    if (count($genres) === 0) {
+      return ['Unassigned'];
+    }
+
+    // Flatten the list for a cleaner response
+    $result = [];
+    foreach ($genres as $record) {
+        $result[] = $record->genre;
+    }
+      return $result;
+  }
+
+  /**
+   * Get the film's warnings, if any.
+   *
+   * @return {stdClass}
+   */
+  function advisories() {
+    require '../core/database.php';
+    $stmt = $pdo->prepare(get_sql('film-advisories'));
+    $stmt->bindValue(':id', $this->id);
+    $stmt->execute();
+    $warnings = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Filter out any columns that indicate no warning
+    $warnings = array_filter($warnings, function($v) {
+      return $v !== '0';
+    });
+
+    // This film has no warnings
+    // The "advisory" values are still printed on the page
+    // to indicate there are no advisories
+    $results = new stdClass();
+    if (count($warnings) === 0) {
+      $results->none = [
+        'type' => 'advisory',
+        'severity' => 'no'
+      ];
+      return $results;
+    }
+
+    // Define proper labels based on values in the db
+    $types = [
+      'violence' => 'violence',
+      'language' => 'language',
+      'sex' => 'sexual content'
+    ];
+    $severity = [
+      '1' => 'mild',
+      '2' => 'moderate',
+      '3' => 'strong'
+    ];
+
+    // Collect the film's warnings
+    foreach ($warnings as $key => $value) {
+      $type = $types[$key];
+      $results->$type = [
+        'type' => $type,
+        'severity' => $severity[$value]
+      ];
+    }
+    return $results;
+  }
+
+  /**
+   * Get the film's cast and crew.
+   *
+   * @return {array}
+   */
+  function cast_crew() {
+    // Get the predefined roles
+    // Both this query and the query for custom-defined roles
+    // must take into account the `name` column being NULL
+    // because the person being referenced has a record
+    // in the `films_users` table and their /(user|real)_name/ is used for
+    // their name instead of it being stored in the `films_castcrew` table,
+    // as it is when the person is _not_ a registered user.
+    // This adds some complexity to the query but allows us to
+    // pull all the data we need in one swoop.
+    // Man, I _LOVE_ half-designed, half-organically grown databases!! /s
+    require '../core/database.php';
+    $stmt = $pdo->prepare(get_sql('film-cast-crew-role-predefined.sql'));
+    $stmt->bindValue(':id', $this->id);
+    $stmt->execute();
+    $standard_roles = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    // Get the custom-defined roles, again taking into account
+    // the /(user|real)_name/ data location difference
+    $stmt = $pdo->prepare(get_sql('film-cast-crew-role-custom.sql'));
+    $stmt->bindValue(':id', $this->id);
+    $stmt->execute();
+    $custom_roles = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    // Merge the two arrays and drop the temporary (`raw_`) keys
+    $all_roles = array_merge($standard_roles, $custom_roles);
+    array_map(function($k) {
+      unset($k->raw_name);
+      unset($k->raw_db_name);
+      unset($k->raw_user_name);
+      return $k;
+    }, $all_roles);
+    return $all_roles;
+  }
+
+  /**
+   * Get the film's staff ratings.
+   *
+   * @return {array}
+   */
+  function staff_ratings() {
+    // BTW, never generate primary IDs like this table has.
+    // Add a new column to the rows each with a unique number
+    // indicating what each category represents. _Please._
+    // Having to use a regex to select the records is... bad
+    require '../core/database.php';
+    $stmt = $pdo->prepare(get_sql('film-staff-ratings'));
+    $stmt->bindValue(':id', $this->id);
+    $stmt->execute();
+    $raw_ratings = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+    // There are no ratings for this film
+    if (count($raw_ratings) === 0) {
+      $indv = new stdClass();
+      $indv->class = 'single';
+      $indv->category = '';
+      $indv->rating = 'No ratings given';
+
+      // We expect an array of `stdClass`es,
+      // so we need to replicate that here
+      return [$indv];
+    }
+
+    // Define the rating categories
+    $categories = [
+      'Ov' => 'Overall',
+      'St' => 'Story',
+      'An' => 'Animation',
+      'Ci' => 'Cinematography',
+      'Ef' => 'Effects',
+      'So' => 'Sound',
+      'Mu' => 'Music'
+    ];
+
+    // Extract the ratings for this film
+    $final_ratings = [];
+    foreach ($raw_ratings as $rating) {
+      $indv = new stdClass();
+
+      // Extract the rating category ID from the record ID and
+      // associate each category with the proper rating
+      // Get the negative length of the film ID for proper slicing
+      $slice_end = -strlen($this->id);
+      $review_code = substr($rating->id, 3, $slice_end);
+      $indv->class = '';
+      $indv->category = $categories[$review_code];
+      $indv->rating = $rating->rating;
+      $final_ratings[] = $indv;
+    }
+    return $final_ratings;
+  }
+
+  /**
+   * Get the film's given honors.
+   *
+   * @return {string}
+   */
+  function honors() {
+    require '../core/database.php';
+    $stmt = $pdo->prepare(get_sql('film-honors'));
+    $stmt->bindValue(':id', $this->id);
+    $stmt->execute();
+    $r = $stmt->fetch(PDO::FETCH_OBJ);
+
+    // Get the proper honor's label
+    $honors = [
+      '1' => 'No honors given',
+      '2' => 'No honors given',
+      '3' => "Reviewer's Pick",
+      '4' => 'Staff Favorite'
+    ];
+    return $honors[$r->review_stat];
+  }
 }
