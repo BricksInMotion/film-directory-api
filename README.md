@@ -11,7 +11,7 @@ To that end, the purpose of this this API to is to provide an independent, simpl
 
 ## Requirements
 
-1. PHP 7.4+
+1. PHP 5.6 or 7.4+
 1. MySQL/MariaDB credentials
 
 ## Usage

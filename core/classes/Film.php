@@ -6,7 +6,6 @@ class Film {
     $this->id = (int) $id;
   }
 
-
   /**
    * Delete a film.
    *
@@ -95,19 +94,7 @@ class Film {
     $stmt = $pdo->prepare(get_sql('film-reviews'));
     $stmt->bindValue(':id', $this->id);
     $stmt->execute();
-    $reviews = $stmt->fetchAll(PDO::FETCH_OBJ);
-
-    // This film has no reviews, provide text that says so
-    if (count($reviews) === 0) {
-      $reviews = new stdClass();
-      $reviews->real_name = 'This film has not been reviewed';
-      $reviews->comments = '';
-
-      // We expect an array of `stdClass`es,
-      // so we need to replicate that here
-      $reviews = [$reviews];
-    }
-    return $reviews;
+    return $stmt->fetchAll(PDO::FETCH_OBJ);
   }
 
   /**
