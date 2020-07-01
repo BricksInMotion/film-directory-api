@@ -39,8 +39,10 @@
 
   // If the roles key is given, at least one role must be requested
   if (empty($roles)) {
-    $possible_vaues = implode(', ', array_keys($role_methods));
-    echo make_error_response(400, "At least one Director role must be provided! Possible values: {$possible_vaues}");
+    $possible_values = array_keys($role_methods);
+    sort($possible_values, SORT_STRING);
+    $possible_values = implode(', ', $possible_values);
+    echo make_error_response(400, "At least one Director role must be provided! Possible values: {$possible_values}");
   }
 
   // Convert the requested roles into a list
