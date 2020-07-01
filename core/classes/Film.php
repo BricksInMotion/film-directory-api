@@ -12,6 +12,10 @@ class Film {
    * @return {bool}
    */
   function exists() {
+    // Short circuit the lookup if the ID is zero
+    // Zero is being used to indicate an unknown film
+    if ($this->id === 0) { return false; }
+
     require '../core/database.php';
     $stmt = $pdo->prepare(get_sql('film-exists'));
     $stmt->bindValue(':id', $this->id);

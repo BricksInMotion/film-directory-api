@@ -1,4 +1,4 @@
-SELECT `films_users`.`real_name`, `comments`
+SELECT `forums_users`.`username`, `comments`
 FROM `films_reviews`
-INNER JOIN `films_users` ON `films_reviews`.`userid` = `films_users`.`user_id`
+INNER JOIN `forums_users` ON `films_reviews`.`userid` = `forums_users`.`id`
 WHERE `films_reviews`.`filmid` = :id;
