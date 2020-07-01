@@ -147,11 +147,10 @@ class Film {
     ];
 
     // Collect the film's warnings
-    $results = new stdClass();
+    $results = [];
     foreach ($warnings as $key => $value) {
-      $type = $types[$key];
-      $results->$type = [
-        'type' => $type,
+      $results[] = [
+        'type' => $types[$key],
         'severity' => $severity[$value]
       ];
     }
