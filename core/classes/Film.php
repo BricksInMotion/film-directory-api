@@ -14,9 +14,10 @@ class Film {
    */
   function delete() {
     require '../core/database.php';
+    // TODO There needs to be a way to delete the thumbnail
     $stmt = $pdo->prepare(get_sql('film-delete'));
     $stmt->bindValue(':id', $this->id);
-    // $stmt->execute();
+    $stmt->execute();
     return true;
   }
 
