@@ -20,7 +20,7 @@
     echo make_response(200, $director->info());
   }
 
-  // Map the role labels to the fetch methods
+  // Map the role values to the fetch methods
   $role_methods = [
     'director' => 'as_director',
     'writer'   => 'as_writer',
@@ -34,35 +34,34 @@
     'va'       => 'as_voice',
   ];
 
-  // We want to get the filmography
-  if (isset($_GET['roles'])) {
-    $roles = escape_xss($_GET['roles']);
+  // We want to get their filmography
+  $roles = escape_xss($_GET['roles']);
 
-    // If the roles key is given, at least one role must be requested
-    if (empty($roles)) {
-      $possible_vaues = implode(', ', array_keys($role_methods));
-      echo make_error_response(400, "At least one Director role must be provided! Possible values: {$possible_vaues}");
-    }
+  // If the roles key is given, at least one role must be requested
+  if (empty($roles)) {
+    $possible_vaues = implode(', ', array_keys($role_methods));
+    echo make_error_response(400, "At least one Director role must be provided! Possible values: {$possible_vaues}");
+  }
 
-    // Convert the requested roles into a list
-    $roles = explode(',', $roles);
-    $filmography = [];
+  // Convert the requested roles into a list
+  $roles = explode(',', $roles);
+  $filmography = [];
 
-    // If a special "all" key is given, collect all the info
-    if (count($roles) === 1 && $roles[0] === "all") {
-      foreach ($role_methods as $label => $func) {
-        $filmography[$label] = $director->$func();
-      }
-      echo make_response(200, $filmography);
-    }
-
-    // For each given key, get the info
-    foreach ($roles as $label) {
-      // ...But ignoring invalid keys
-      if (array_key_exists($label, $role_methods)) {
-        $func = $role_methods[$label];
-        $filmography[$label] = $director->$func();
-      }
+  // If a special "all" key is given, collect all the info
+  if (count($roles) === 1 && $roles[0] === "all") {
+    foreach ($role_methods as $label => $func) {
+      $filmography['info'] = $director->info();
+      $filmography[$label] = $director->$func();
     }
     echo make_response(200, $filmography);
   }
+
+  // For each given key, get the info
+  foreach ($roles as $label) {
+    // ...But ignoring invalid keys
+    if (array_key_exists($label, $role_methods)) {
+      $func = $role_methods[$label];
+      $filmography[$label] = $director->$func();
+    }
+  }
+  echo make_response(200, $filmography);
