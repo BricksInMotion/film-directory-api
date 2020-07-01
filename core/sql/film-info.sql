@@ -1,11 +1,11 @@
 SELECT
   `id`,
   `title`,
-  `user_desc` AS `desc`,
+  `user_desc` AS `description`,
   `img_thumb` AS `thumbnail`,
   `lenth` AS `length`,
   `date_create` AS `release_date`,
-  `user_id` AS `director_id`
+  `user_id`
 FROM `films`
 WHERE `films`.`id`= :id
 LIMIT 1;
