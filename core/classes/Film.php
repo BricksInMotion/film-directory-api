@@ -177,21 +177,21 @@ class Film {
     // Both this query and the query for custom-defined roles
     // must take into account the `name` column being NULL
     // because the person being referenced has a record
-    // in the `films_users` table and their /(user|real)_name/ is used for
+    // in the `forums_users` table and their /(user|real)_name/ is used for
     // their name instead of it being stored in the `films_castcrew` table,
     // as it is when the person is _not_ a registered user.
     // This adds some complexity to the query but allows us to
     // pull all the data we need in one swoop.
     // Man, I _LOVE_ half-designed, half-organically grown databases!! /s
     require '../core/database.php';
-    $stmt = $pdo->prepare(get_sql('film-cast-crew-role-predefined.sql'));
+    $stmt = $pdo->prepare(get_sql('film-cast-crew-role-predefined'));
     $stmt->bindValue(':id', $this->id);
     $stmt->execute();
     $standard_roles = $stmt->fetchAll(PDO::FETCH_OBJ);
 
     // Get the custom-defined roles, again taking into account
     // the /(user|real)_name/ data location difference
-    $stmt = $pdo->prepare(get_sql('film-cast-crew-role-custom.sql'));
+    $stmt = $pdo->prepare(get_sql('film-cast-crew-role-custom'));
     $stmt->bindValue(':id', $this->id);
     $stmt->execute();
     $custom_roles = $stmt->fetchAll(PDO::FETCH_OBJ);
