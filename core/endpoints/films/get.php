@@ -7,7 +7,7 @@
     echo make_error_response(400, 'A Film ID must be provided!');
   }
 
-  // Get the film
+  // Get a film object
   $film = new Film(escape_xss($_GET['id']));
 
   // That film doesn't exist

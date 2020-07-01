@@ -6,6 +6,20 @@ class Film {
     $this->id = (int) $id;
   }
 
+
+  /**
+   * Delete a film.
+   *
+   * @return {bool}
+   */
+  function delete() {
+    require '../core/database.php';
+    $stmt = $pdo->prepare(get_sql('film-delete'));
+    $stmt->bindValue(':id', $this->id);
+    // $stmt->execute();
+    return true;
+  }
+
   /**
    * Determine if the film exists.
    *
