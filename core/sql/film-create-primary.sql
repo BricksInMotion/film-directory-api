@@ -7,7 +7,5 @@ INSERT INTO films (
 );
 
 -- TODO:
--- * image file name
--- * image upload
 -- * literally everything else
 -- ** EXCEPT rating (not touching that)

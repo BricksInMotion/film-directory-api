@@ -16,7 +16,7 @@ To that end, the purpose of this this API to is to provide an independent, simpl
 
 ## Usage
 
-1. `$ mv .login/credentials-example.json .login/credentials.json`
+1. `$ cp .login/credentials-example.json .login/credentials.json`
 1. Add database credentials
 
 ## License
