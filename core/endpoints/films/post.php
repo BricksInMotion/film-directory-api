@@ -32,6 +32,9 @@
   }
 
   $has_cast_crew = has_cast_crew_info($film_info['cast_crew']);
+  if (!$has_cast_crew) {
+    echo make_error_response(422, "Films cast and crew must have, at least, a listed director!");
+  }
 
   // Create a film object to create the film
   $film = new Film();

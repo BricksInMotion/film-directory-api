@@ -46,5 +46,5 @@
 
 
   function has_cast_crew_info($film_crew) {
-    return false;
+    return true;
   }
