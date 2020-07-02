@@ -76,7 +76,7 @@ class Film {
     require '../core/database.php';
     $stmt = $pdo->prepare(get_sql('film-delete'));
     $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
-    // $stmt->execute();
+    $stmt->execute();
     return true;
   }
 
