@@ -157,11 +157,6 @@ class Film {
     $stmt->execute();
     $genres = $stmt->fetchAll(PDO::FETCH_OBJ);
 
-    // This film has no assigned genres
-    if (count($genres) === 0) {
-      return ['Unassigned'];
-    }
-
     // Flatten the list for a cleaner response
     $result = [];
     foreach ($genres as $record) {
