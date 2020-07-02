@@ -65,7 +65,7 @@ function generate_allow_header($endpoint_path) {
  * Load any JSON data into a PHP array.
  */
 function get_json($path) {
-  return json_decode(file_get_contents($path), false);
+  return json_decode(file_get_contents($path), true);
 }
 
 
