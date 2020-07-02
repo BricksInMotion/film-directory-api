@@ -15,7 +15,8 @@
       'violence',
       'release_date',
       'user_id',
-      'links'
+      'links',
+      'genres'
     ];
     $provided_info = array_keys($film_info);
     $diff = array_diff($required_info, $provided_info);
@@ -42,4 +43,9 @@
       }
     }
     return true;
+  }
+
+
+  function has_genres($film_genres) {
+    return count($film_links) >= 1;
   }

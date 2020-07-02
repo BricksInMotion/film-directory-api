@@ -41,7 +41,7 @@ class Film {
       }
 
       // Record the film genres
-      // $stmt = $pdo->prepare(get_sql('film-create-genres'));
+      $stmt = $pdo->prepare(get_sql('film-create-genres'));
 
       // Record who all was involved in the film's creation
       // $stmt = $pdo->prepare(get_sql('film-create-cast-crew'));
