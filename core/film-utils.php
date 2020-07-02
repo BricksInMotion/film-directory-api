@@ -34,7 +34,7 @@
   }
 
 
-  function has_links_data($film_links) {
+  function has_links($film_links) {
     foreach ($film_links as $pair) {
       $keys = array_keys($pair);
       $diff = array_diff(['url', 'label'], $keys);
@@ -47,5 +47,5 @@
 
 
   function has_genres($film_genres) {
-    return count($film_links) >= 1;
+    return count($film_genres) >= 1;
   }

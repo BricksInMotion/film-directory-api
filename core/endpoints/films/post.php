@@ -12,7 +12,8 @@
   }
 
   $has_info = has_base_film_data($film_info);
-  $has_links = has_links_data($film_info['links']);
+  $has_links = has_links($film_info['links']);
+  $has_genre = has_genres($film_info['genres']);
 
   // There's missing film base information
   if (!$has_info['success']) {
@@ -24,6 +25,11 @@
   // Film links were not provideds in the correct format
   if (!$has_links) {
     echo make_error_response(422, "Film links are incorrectly submitted!");
+  }
+
+  // There must be at least one genre
+  if (!$has_genre) {
+    echo make_error_response(422, "Films must have at least one assigned genre!");
   }
 
   // Create a film object to create the film

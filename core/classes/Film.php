@@ -42,6 +42,12 @@ class Film {
 
       // Record the film genres
       $stmt = $pdo->prepare(get_sql('film-create-genres'));
+      foreach ($film_info['genres'] as $i => $genre_id) {;
+        $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+        $stmt->bindValue(':genre_id', $genre_id, PDO::PARAM_INT);
+        $stmt->bindValue(':primary', intval($i === 0), PDO::PARAM_INT);
+        $stmt->execute();
+      }
 
       // Record who all was involved in the film's creation
       // $stmt = $pdo->prepare(get_sql('film-create-cast-crew'));
@@ -56,6 +62,7 @@ class Film {
       // TODO The error should be logged to file
     } catch(Exception $e) {
       $pdo->rollback();
+      echo $e->getMessage();
       return false;
     }
   }
