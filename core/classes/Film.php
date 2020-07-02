@@ -29,9 +29,16 @@ class Film {
 
       // Get the generated film ID to use for inserting the other data
       $film_id = $pdo->lastInsertId();
+      $this->id = $film_id;
 
       // Insert the film links
-      // $stmt = $pdo->prepare(get_sql('film-create-links'));
+      $stmt = $pdo->prepare(get_sql('film-create-links'));
+      foreach ($film_info['links'] as $link) {
+        $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+        $stmt->bindValue(':url', $link['url'], PDO::PARAM_STR);
+        $stmt->bindValue(':label', $link['label'], PDO::PARAM_STR);
+        $stmt->execute();
+      }
 
       // Record the film genres
       // $stmt = $pdo->prepare(get_sql('film-create-genres'));
@@ -43,7 +50,6 @@ class Film {
       $pdo->commit();
 
       // Record the film's ID
-      $this->id = $film_id;
       return true;
 
       // There was an error in recording the film
@@ -162,7 +168,7 @@ class Film {
     foreach ($genres as $record) {
         $result[] = $record->genre;
     }
-      return $result;
+    return $result;
   }
 
   /**

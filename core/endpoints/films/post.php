@@ -11,12 +11,19 @@
     echo make_error_response(400, "Film info must be provided!");
   }
 
-  // There's missing film information
-  $all_info_result = has_all_film_data($film_info);
-  if (!$all_info_result['success']) {
-    sort($all_info_result['missing'], SORT_STRING);
-    $missing_info = implode(', ', $all_info_result['missing']);
+  $has_info = has_base_film_data($film_info);
+  $has_links = has_links_data($film_info['links']);
+
+  // There's missing film base information
+  if (!$has_info['success']) {
+    sort($has_info['missing'], SORT_STRING);
+    $missing_info = implode(', ', $has_info['missing']);
     echo make_error_response(422, "The following Film info is missing: {$missing_info}");
+  }
+
+  // Film links were not provideds in the correct format
+  if (!$has_links) {
+    echo make_error_response(422, "Film links are incorrectly submitted!");
   }
 
   // Create a film object to create the film
@@ -25,7 +32,7 @@
 
   // It worked!!
   if ($create_result) {
-    echo make_response(201, $film->exists());
+    echo make_response(201, $film->info());
 
   // There was a problem recording the film, probably from bad data
   } else {

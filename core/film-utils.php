@@ -1,5 +1,5 @@
 <?php
-  function has_all_film_data($film_info) {
+  function has_base_film_data($film_info) {
     $result = [
       'success' => false,
       'missing' => []
@@ -15,6 +15,7 @@
       'violence',
       'creation_date',
       'user_id',
+      'links'
     ];
     $provided_info = array_keys($film_info);
     $diff = array_diff($required_info, $provided_info);
@@ -29,4 +30,15 @@
     // All data is present
     $result['success'] = true;
     return $result;
+  }
+
+  function has_links_data($film_links) {
+    foreach ($film_links as $pair) {
+      $keys = array_keys($pair);
+      $diff = array_diff(['url', 'label'], $keys);
+      if (!empty($diff)) {
+        return false;
+      }
+    }
+    return true;
   }
