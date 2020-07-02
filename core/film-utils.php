@@ -1,5 +1,5 @@
 <?php
-  function has_base_film_data($film_info) {
+  function has_film_info($film_info) {
     $result = [
       'success' => false,
       'missing' => []
@@ -7,16 +7,10 @@
 
     // Ensure all required info was given
     $required_info = [
-      'title',
-      'description',
-      'length',
-      'sex',
-      'language',
-      'violence',
-      'release_date',
-      'user_id',
-      'links',
-      'genres'
+      'cast_crew', 'description', 'genres',
+      'language', 'length', 'links',
+      'release_date', 'sex', 'title',
+      'user_id', 'violence'
     ];
     $provided_info = array_keys($film_info);
     $diff = array_diff($required_info, $provided_info);
@@ -48,4 +42,9 @@
 
   function has_genres($film_genres) {
     return count($film_genres) >= 1;
+  }
+
+
+  function has_cast_crew_info($film_crew) {
+    return false;
   }
