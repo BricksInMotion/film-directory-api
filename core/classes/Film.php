@@ -14,7 +14,7 @@ class Film {
   function delete() {
     require '../core/database.php';
     $stmt = $pdo->prepare(get_sql('film-delete'));
-    $stmt->bindValue(':id', $this->id);
+    $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
     // $stmt->execute();
     return true;
   }
@@ -31,7 +31,7 @@ class Film {
 
     require '../core/database.php';
     $stmt = $pdo->prepare(get_sql('film-exists'));
-    $stmt->bindValue(':id', $this->id);
+    $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
     $stmt->execute();
     return (bool) $stmt->fetch(PDO::FETCH_OBJ);
   }
@@ -44,7 +44,7 @@ class Film {
   function info() {
     require '../core/database.php';
     $stmt = $pdo->prepare(get_sql('film-info'));
-    $stmt->bindValue(':id', $this->id);
+    $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_OBJ);
   }
@@ -60,7 +60,7 @@ class Film {
     // It's a big ugly because the lack of a rating is a NULL value
     require '../core/database.php';
     $stmt = $pdo->prepare(get_sql('film-rating'));
-    $stmt->bindValue(':id', $this->id);
+    $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
     $stmt->execute();
 
     // Drop the temporary (`raw_`) keys
@@ -79,7 +79,7 @@ class Film {
   function links() {
     require '../core/database.php';
     $stmt = $pdo->prepare(get_sql('film-links'));
-    $stmt->bindValue(':id', $this->id);
+    $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_OBJ);
   }
@@ -92,7 +92,7 @@ class Film {
   function reviews() {
     require '../core/database.php';
     $stmt = $pdo->prepare(get_sql('film-reviews'));
-    $stmt->bindValue(':id', $this->id);
+    $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_OBJ);
   }
@@ -105,7 +105,7 @@ class Film {
   function genres() {
     require '../core/database.php';
     $stmt = $pdo->prepare(get_sql('film-genres'));
-    $stmt->bindValue(':id', $this->id);
+    $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
     $stmt->execute();
     $genres = $stmt->fetchAll(PDO::FETCH_OBJ);
 
@@ -130,7 +130,7 @@ class Film {
   function advisories() {
     require '../core/database.php';
     $stmt = $pdo->prepare(get_sql('film-advisories'));
-    $stmt->bindValue(':id', $this->id);
+    $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
     $stmt->execute();
     $warnings = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -176,14 +176,14 @@ class Film {
     // Man, I _LOVE_ half-designed, half-organically grown databases!! /s
     require '../core/database.php';
     $stmt = $pdo->prepare(get_sql('film-cast-crew-role-predefined'));
-    $stmt->bindValue(':id', $this->id);
+    $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
     $stmt->execute();
     $standard_roles = $stmt->fetchAll(PDO::FETCH_OBJ);
 
     // Get the custom-defined roles, again taking into account
     // the /(user|real)_name/ data location difference
     $stmt = $pdo->prepare(get_sql('film-cast-crew-role-custom'));
-    $stmt->bindValue(':id', $this->id);
+    $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
     $stmt->execute();
     $custom_roles = $stmt->fetchAll(PDO::FETCH_OBJ);
 
@@ -210,7 +210,7 @@ class Film {
     // Having to use a regex to select the records is... bad
     require '../core/database.php';
     $stmt = $pdo->prepare(get_sql('film-staff-ratings'));
-    $stmt->bindValue(':id', $this->id);
+    $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
     $stmt->execute();
     $raw_ratings = $stmt->fetchAll(PDO::FETCH_OBJ);
 
@@ -263,7 +263,7 @@ class Film {
   function honors() {
     require '../core/database.php';
     $stmt = $pdo->prepare(get_sql('film-honors'));
-    $stmt->bindValue(':id', $this->id);
+    $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
     $stmt->execute();
     $r = $stmt->fetch(PDO::FETCH_OBJ);
 
