@@ -5,5 +5,5 @@ INSERT INTO films (
 ) VALUES (
   :title, :user_id, :description,
   :sex, :language, :violence,
-  1, :creation_date, :length
+  1, :release_date, :length
 );

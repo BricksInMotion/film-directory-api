@@ -13,7 +13,7 @@
       'sex',
       'language',
       'violence',
-      'creation_date',
+      'release_date',
       'user_id',
       'links'
     ];
@@ -31,6 +31,7 @@
     $result['success'] = true;
     return $result;
   }
+
 
   function has_links_data($film_links) {
     foreach ($film_links as $pair) {

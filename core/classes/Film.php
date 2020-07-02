@@ -23,7 +23,7 @@ class Film {
       $stmt->bindValue(':sex', $film_info['sex'], PDO::PARAM_INT);
       $stmt->bindValue(':language', $film_info['language'], PDO::PARAM_INT);
       $stmt->bindValue(':violence', $film_info['violence'], PDO::PARAM_INT);
-      $stmt->bindValue(':creation_date', $film_info['creation_date'], PDO::PARAM_STR);
+      $stmt->bindValue(':release_date', $film_info['release_date'], PDO::PARAM_STR);
       $stmt->bindValue(':user_id', $film_info['user_id'], PDO::PARAM_INT);
       $stmt->execute();
 
