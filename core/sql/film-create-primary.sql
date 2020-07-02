@@ -3,9 +3,7 @@ INSERT INTO films (
   warn_sex, warn_lang, warn_vio,
   review_stat, date_create, lenth
 ) VALUES (
-
+  :title, :user_id, :description,
+  :sex, :language, :violence,
+  1, :creation_date, :length
 );
-
--- TODO:
--- * literally everything else
--- ** EXCEPT rating (not touching that)

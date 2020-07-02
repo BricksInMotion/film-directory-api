@@ -1,9 +1,57 @@
 <?php
 class Film {
-  public $id = 0;
+  public $id;
 
-  function __construct($id) {
+  function __construct($id = 0) {
     $this->id = (int) $id;
+  }
+
+  /**
+   * Insert a film into the directory.
+   *
+   * @return {bool}
+   */
+  function create($film_info) {
+    require '../core/database.php';
+    try {
+      // Record the primary film record
+      $pdo->beginTransaction();
+      $stmt = $pdo->prepare(get_sql('film-create-primary'));
+      $stmt->bindValue(':title', $film_info['title'], PDO::PARAM_STR);
+      $stmt->bindValue(':description', $film_info['description'], PDO::PARAM_STR);
+      $stmt->bindValue(':length', $film_info['length'], PDO::PARAM_INT);
+      $stmt->bindValue(':sex', $film_info['sex'], PDO::PARAM_INT);
+      $stmt->bindValue(':language', $film_info['language'], PDO::PARAM_INT);
+      $stmt->bindValue(':violence', $film_info['violence'], PDO::PARAM_INT);
+      $stmt->bindValue(':creation_date', $film_info['creation_date'], PDO::PARAM_STR);
+      $stmt->bindValue(':user_id', $film_info['user_id'], PDO::PARAM_INT);
+      $stmt->execute();
+
+      // Get the generated film ID to use for inserting the other data
+      $film_id = $pdo->lastInsertId();
+
+      // Insert the film links
+      // $stmt = $pdo->prepare(get_sql('film-create-links'));
+
+      // Record the film genres
+      // $stmt = $pdo->prepare(get_sql('film-create-genres'));
+
+      // Record who all was involved in the film's creation
+      // $stmt = $pdo->prepare(get_sql('film-create-cast-crew'));
+
+      // Finally, save everything
+      $pdo->commit();
+
+      // Record the film's ID
+      $this->id = $film_id;
+      return true;
+
+      // There was an error in recording the film
+      // TODO The error should be logged to file
+    } catch(Exception $e) {
+      $pdo->rollback();
+      return false;
+    }
   }
 
   /**
