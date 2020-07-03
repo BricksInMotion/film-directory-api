@@ -3,7 +3,7 @@ class Search {
   /**
    * Search for a Film by title.
    */
-  static function by_title($title) {
+  static function by_film($title) {
     require '../core/database.php';
     $stmt = $pdo->prepare(get_sql('search-by-title'));
     $stmt->bindValue(':title', $title);

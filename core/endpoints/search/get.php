@@ -14,10 +14,10 @@
   }
 
   // We're wanting to search by film title
-  if (isset($_GET['title'])) {
-    $search_param = 'title';
-    $search_query = escape_xss($_GET['title']);
-    $search_results = Search::by_title($search_query);
+  if (isset($_GET['film'])) {
+    $search_param = 'film';
+    $search_query = escape_xss($_GET['film']);
+    $search_results = Search::by_film($search_query);
 
   // We're wanting to search by director name
   } else if (isset($_GET['director'])) {
