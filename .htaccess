@@ -1,3 +1,8 @@
+# Handle all bad requests
 ErrorDocument 403 /404.php
 ErrorDocument 404 /404.php
 ErrorDocument 500 /404.php
+
+# Forward the Authorization header to PHP
+RewriteEngine On
+RewriteRule .* - [e=AUTHORIZATION:%{HTTP:Authorization}]
