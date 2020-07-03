@@ -77,7 +77,7 @@ function get_json($path) {
  */
 function get_sql($script_name) {
   // Throw an exception if we can't find the script
-  $sql = $_SERVER['DOCUMENT_ROOT'] . "/core/sql/{$script_name}.sql";
+  $sql = $_SERVER['DOCUMENT_ROOT'] . "/core/sql/queries/{$script_name}.sql";
   if (file_exists($sql) === false) {
     throw new Exception("SQL script {$script_name} does not exist!");
   }
