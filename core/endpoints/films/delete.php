@@ -1,6 +1,12 @@
 <?php
+  require_once '../core/auth.php';
   require_once '../core/common-utils.php';
   require_once '../core/classes/Film.php';
+
+  // Make sure this request is authorized
+  if (!is_authorized_request()) {
+    return make_error_response(403, 'An API key is required to access this endpoint!');
+  }
 
   // A film id was not provided
   if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {

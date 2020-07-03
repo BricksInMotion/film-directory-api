@@ -1,7 +1,13 @@
 <?php
+  require_once '../core/auth.php';
   require_once '../core/common-utils.php';
   require_once '../core/film-utils.php';
   require_once '../core/classes/Film.php';
+
+  // Make sure this request is authorized
+  if (!is_authorized_request()) {
+    return make_error_response(403, 'An API key is required to access this endpoint!');
+  }
 
   // Get the film data from the submitted JSON
   $film_info = get_json('php://input');
