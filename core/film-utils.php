@@ -28,7 +28,6 @@
       return $result;
     }
 
-
     static function has_links($links) {
       foreach ($links as $pair) {
         $keys = array_keys($pair);
@@ -40,11 +39,9 @@
       return true;
     }
 
-
     static function has_genres($genres) {
       return ($genres !== null && count($genres) >= 1);
     }
-
 
     static function has_cast_crew($crew) {
       if ($crew === null) {
@@ -58,7 +55,6 @@
       }
       return true;
     }
-
 
     static function has_rating($rating) {
       return (
