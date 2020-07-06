@@ -109,3 +109,16 @@ function make_response($code, $data=null, $headers=null) {
   }
   exit();
 }
+
+
+/**
+ * Write an error message to log.
+ *
+ * @param {str} $msg - The error message to write.
+ */
+function write_to_log($msg) {
+  $log_file = $_SERVER['DOCUMENT_ROOT'] . '/log/error.log';
+  $current_time = date('c');
+  $log_msg = "[{$current_time}] {$msg}\n";
+  file_put_contents($log_file, $log_msg, FILE_APPEND | LOCK_EX);
+}
