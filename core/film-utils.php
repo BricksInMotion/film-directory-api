@@ -27,8 +27,8 @@
   }
 
 
-  function has_links($film_links) {
-    foreach ($film_links as $pair) {
+  function has_links($links) {
+    foreach ($links as $pair) {
       $keys = array_keys($pair);
       $diff = array_diff(['url', 'label'], $keys);
       if (!empty($diff)) {
@@ -39,31 +39,37 @@
   }
 
 
-  function has_genres($film_genres) {
-    return count($film_genres) >= 1;
+  function has_genres($genres) {
+    return ($genres !== null && count($genres) >= 1);
   }
 
 
-  function has_cast_crew_info($film_crew) {
-    return true;
-  }
-
-
-  function has_rating($film_rating) {
+  function has_cast_crew_info($crew) {
     return (
-      $film_rating !== null &&
-      isset($film_rating['user_id'], $film_rating['value'])
+      $crew !== null &&
+      isset($crew['role_id'], $crew['user_id'], $crew['user_name'], $crew['description'])
     );
   }
 
-  function has_advisories($film_advisories) {
-    return isset(
-      $film_advisories['sex'],
-      $film_advisories['language'],
-      $film_advisories['violence']
-    ) && (
-      $film_advisories['sex'] >= 0 &&
-      $film_advisories['language'] >= 0 &&
-      $film_advisories['violence'] >= 0
+
+  function has_rating($rating) {
+    return (
+      $rating !== null &&
+      isset($rating['user_id'], $rating['value'])
+    );
+  }
+
+  function has_advisories($advisories) {
+    return (
+      $advisories !== null &&
+      isset(
+        $advisories['sex'],
+        $advisories['language'],
+        $advisories['violence']
+      ) && (
+        $advisories['sex'] >= 0 &&
+        $advisories['language'] >= 0 &&
+        $advisories['violence'] >= 0
+      )
     );
   }
