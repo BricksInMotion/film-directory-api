@@ -120,16 +120,7 @@ class Film {
     $stmt = $pdo->prepare(get_sql('film-rating'));
     $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
     $stmt->execute();
-    $ratings = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    // We don't have any ratings
-    if (!$ratings) { return []; }
-
-    // Drop the temporary (`raw_`) keys
-    $ratings = array_filter($ratings, function($k) {
-      return strpos($k, 'raw_') === false;
-    }, ARRAY_FILTER_USE_KEY);
-    return $ratings;
+    return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 
 
