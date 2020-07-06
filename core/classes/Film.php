@@ -111,17 +111,25 @@ class Film {
   }
 
   /**
-   * Get the film's rating.
+   * Get the film's rating and vote breakdown.
    *
-   * @return {stdClass}
+   * @return {array}
    */
   function rating() {
-    // TODO Have way to return individual vote info
     require '../core/database.php';
+
+    // Get the computed rating
     $stmt = $pdo->prepare(get_sql('film-rating'));
     $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
     $stmt->execute();
-    return $stmt->fetch(PDO::FETCH_ASSOC);
+    $ratings = ['rating' => $stmt->fetch(PDO::FETCH_ASSOC)];
+
+    // Get the vote breakdown too
+    $stmt = $pdo->prepare(get_sql('film-rating-breakdown'));
+    $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+    $stmt->execute();
+    $breakdown = ['breakdown' => $stmt->fetchAll(PDO::FETCH_ASSOC)];
+    return array_merge($ratings, $breakdown);
   }
 
 
