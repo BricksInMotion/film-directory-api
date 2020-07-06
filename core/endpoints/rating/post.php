@@ -13,7 +13,7 @@
   $rating_info = get_json('php://input');
 
   // We didn't get any rating information
-  if (!has_rating($rating_info)) {
+  if (!Validate::has_rating($rating_info)) {
     echo make_error_response(400, "Film rating info must be provided!");
   }
 
