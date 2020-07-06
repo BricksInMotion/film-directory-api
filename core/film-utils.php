@@ -48,3 +48,11 @@
   function has_cast_crew_info($film_crew) {
     return true;
   }
+
+
+  function has_rating($film_rating) {
+    return (
+      $film_rating !== null &&
+      isset($film_rating['user_id'], $film_rating['value'])
+    );
+  }

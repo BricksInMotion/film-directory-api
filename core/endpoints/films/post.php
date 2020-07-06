@@ -4,6 +4,7 @@
   require_once '../core/film-utils.php';
   require_once '../core/classes/Film.php';
 
+
   // Make sure this request is authorized
   if (!is_authorized_request()) {
     return make_error_response(403, 'An API key is required to access this endpoint!');

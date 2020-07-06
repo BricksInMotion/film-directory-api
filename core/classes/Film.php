@@ -119,6 +119,7 @@ class Film {
     // This query calculates the film's rating as well as handles
     // the (likely common) case where a film does not have a rating.
     // It's a big ugly because the lack of a rating is a NULL value
+    // TODO Rewrite query to pull from `films_user_rate_votes` table
     require '../core/database.php';
     $stmt = $pdo->prepare(get_sql('film-rating'));
     $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
@@ -134,6 +135,28 @@ class Film {
     }, ARRAY_FILTER_USE_KEY);
     return $ratings;
   }
+
+
+  /**
+   * Record a film rating.
+   *
+   * @return {bool}
+   */
+  function rate($rating) {
+    try {
+      require '../core/database.php';
+      $stmt = $pdo->prepare(get_sql('film-rating-submit'));
+      $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+      $stmt->bindValue(':user_id', $rating['user_id'], PDO::PARAM_INT);
+      $stmt->bindValue(':rating_value', $rating['value'], PDO::PARAM_INT);
+      $stmt->execute();
+      return true;
+
+    } catch (PDOException $exc) {
+      return false;
+    }
+  }
+
 
   /**
    * Get all links to the film.
