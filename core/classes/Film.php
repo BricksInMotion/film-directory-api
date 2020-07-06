@@ -19,10 +19,10 @@ class Film {
       $stmt = $pdo->prepare(get_sql('film-create-primary'));
       $stmt->bindValue(':title', $film_info['title'], PDO::PARAM_STR);
       $stmt->bindValue(':description', $film_info['description'], PDO::PARAM_STR);
-      $stmt->bindValue(':length', $film_info['length'], PDO::PARAM_INT);
-      $stmt->bindValue(':sex', $film_info['sex'], PDO::PARAM_INT);
-      $stmt->bindValue(':language', $film_info['language'], PDO::PARAM_INT);
-      $stmt->bindValue(':violence', $film_info['violence'], PDO::PARAM_INT);
+      $stmt->bindValue(':length', $film_info['runtime'], PDO::PARAM_INT);
+      $stmt->bindValue(':sex', $film_info['advisories']['sex'], PDO::PARAM_INT);
+      $stmt->bindValue(':language', $film_info['advisories']['language'], PDO::PARAM_INT);
+      $stmt->bindValue(':violence', $film_info['advisories']['violence'], PDO::PARAM_INT);
       $stmt->bindValue(':release_date', $film_info['release_date'], PDO::PARAM_STR);
       $stmt->bindValue(':user_id', $film_info['user_id'], PDO::PARAM_INT);
       $stmt->execute();
@@ -64,15 +64,9 @@ class Film {
           $stmt->bindValue(':user_name', null, PDO::PARAM_NULL);
         }
 
-        // if (in_array($person['role_id'], [8, 10])) {
-
-        // } else {
-
-        // }
-
         // Handle a present/missing role title/desc. This occurrs when the
         // Other Crew or VA role is present
-        if (trim($person['description'])) {
+        if (!empty(trim($person['description']))) {
           $stmt->bindValue(':description', $person['description'], PDO::PARAM_STR);
         } else {
           $stmt->bindValue(':description', null, PDO::PARAM_NULL);
@@ -88,9 +82,9 @@ class Film {
 
       // There was an error in recording the film
       // TODO The error should be logged to file
-    } catch(Exception $e) {
+    } catch(Exception $exc) {
       $pdo->rollback();
-      echo $e->getMessage();
+      echo $exc->getMessage();
       return false;
     }
   }
