@@ -46,11 +46,17 @@
     }
 
 
-    static function has_cast_crew_info($crew) {
-      return (
-        $crew !== null &&
-        isset($crew['role_id'], $crew['user_id'], $crew['user_name'], $crew['description'])
-      );
+    static function has_cast_crew($crew) {
+      if ($crew === null) {
+        return false;
+      }
+
+      foreach ($crew as $person) {
+        if (!isset($person['role_id'], $person['user_id'], $person['user_name'], $person['description'])) {
+          return false;
+        }
+      }
+      return true;
     }
 
 

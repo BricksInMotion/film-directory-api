@@ -45,7 +45,7 @@
   }
 
   // There should be cast and crew info
-  $has_cast_crew = Validate::has_cast_crew_info($film_info['cast_crew']);
+  $has_cast_crew = Validate::has_cast_crew($film_info['cast_crew']);
   if (!$has_cast_crew) {
     echo make_error_response(422, "Films cast and crew must be provided!");
   }
