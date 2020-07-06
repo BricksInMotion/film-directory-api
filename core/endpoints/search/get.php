@@ -17,13 +17,25 @@
   if (isset($_GET['film'])) {
     $search_param = 'film';
     $search_query = escape_xss($_GET['film']);
-    $search_results = Search::by_film($search_query);
+
+    // Don't permit single character searches
+    if (strlen($search_query) <= 1) {
+      $search_results = [];
+    } else {
+      $search_results = Search::by_film($search_query);
+    }
 
   // We're wanting to search by director name
   } else if (isset($_GET['director'])) {
     $search_param = 'director';
     $search_query = escape_xss($_GET['director']);
-    $search_results = Search::by_director($search_query);
+
+    // Don't permit single character searches
+    if (strlen($search_query) <= 1) {
+      $search_results = [];
+    } else {
+      $search_results = Search::by_director($search_query);
+    }
 
   // We were provided an invalid query param
   } else {
