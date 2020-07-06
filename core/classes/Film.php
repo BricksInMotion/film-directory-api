@@ -116,10 +116,6 @@ class Film {
    * @return {stdClass}
    */
   function rating() {
-    // This query calculates the film's rating as well as handles
-    // the (likely common) case where a film does not have a rating.
-    // It's a big ugly because the lack of a rating is a NULL value
-    // TODO Rewrite query to pull from `films_user_rate_votes` table
     require '../core/database.php';
     $stmt = $pdo->prepare(get_sql('film-rating'));
     $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
