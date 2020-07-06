@@ -26,7 +26,13 @@
     echo make_error_response(422, "The following Film info is missing: {$missing_info}");
   }
 
-  // Film links were not provideds in the correct format
+  // Advisories must be provided
+  $has_advisories = has_advisories($film_info['advisories']);
+  if (!$has_advisories) {
+    echo make_error_response(422, "Film advisory warnings must be submitted!");
+  }
+
+  // Film links were not provided in the correct format
   $has_links = has_links($film_info['links']);
   if (!$has_links) {
     echo make_error_response(422, "Film links are incorrectly submitted!");
@@ -38,9 +44,10 @@
     echo make_error_response(422, "Films must have at least one assigned genre!");
   }
 
+  // There should be cast and crew info
   $has_cast_crew = has_cast_crew_info($film_info['cast_crew']);
   if (!$has_cast_crew) {
-    echo make_error_response(422, "Films cast and crew must have, at least, a listed director!");
+    echo make_error_response(422, "Films cast and crew must have, at least, a director!");
   }
 
   // Create a film object to create the film

@@ -7,10 +7,9 @@
 
     // Ensure all required info was given
     $required_info = [
-      'cast_crew', 'description', 'genres',
-      'language', 'runtime', 'links',
-      'release_date', 'sex', 'title',
-      'user_id', 'violence'
+      'advisories', 'cast_crew', 'description',
+      'genres', 'runtime', 'links',
+      'release_date', 'title', 'user_id',
     ];
     $provided_info = array_keys($film_info);
     $diff = array_diff($required_info, $provided_info);
@@ -54,5 +53,13 @@
     return (
       $film_rating !== null &&
       isset($film_rating['user_id'], $film_rating['value'])
+    );
+  }
+
+  function has_advisories($film_advisories) {
+    return isset(
+      $film_advisories['sex'],
+      $film_advisories['language'],
+      $film_advisories['violence']
     );
   }
