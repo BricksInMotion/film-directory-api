@@ -23,5 +23,5 @@
 
   // Delete the film. We're going to mimic SQL's behavior of
   // always reporting a successful deletion just because it's easy
-  // $film->delete();
+  $film->delete();
   echo make_response(204);
