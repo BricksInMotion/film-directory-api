@@ -19,7 +19,7 @@
   }
 
   // There's missing film base information
-  $has_info = has_film_info($film_info);
+  $has_info = Validate::has_film_info($film_info);
   if (!$has_info['success']) {
     sort($has_info['missing'], SORT_STRING);
     $missing_info = implode(', ', $has_info['missing']);
@@ -27,27 +27,27 @@
   }
 
   // Advisories must be provided
-  $has_advisories = has_advisories($film_info['advisories']);
+  $has_advisories = Validate::has_advisories($film_info['advisories']);
   if (!$has_advisories) {
     echo make_error_response(422, "Film advisory warnings must be submitted!");
   }
 
   // Film links were not provided in the correct format
-  $has_links = has_links($film_info['links']);
+  $has_links = Validate::has_links($film_info['links']);
   if (!$has_links) {
     echo make_error_response(422, "Film links are incorrectly submitted!");
   }
 
   // There must be at least one genre
-  $has_genre = has_genres($film_info['genres']);
+  $has_genre = Validate::has_genres($film_info['genres']);
   if (!$has_genre) {
     echo make_error_response(422, "Films must have at least one assigned genre!");
   }
 
   // There should be cast and crew info
-  $has_cast_crew = has_cast_crew_info($film_info['cast_crew']);
+  $has_cast_crew = Validate::has_cast_crew_info($film_info['cast_crew']);
   if (!$has_cast_crew) {
-    echo make_error_response(422, "Films cast and crew must have, at least, a director!");
+    echo make_error_response(422, "Films cast and crew must be provided!");
   }
 
   // Create a film object to create the film
