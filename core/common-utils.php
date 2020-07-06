@@ -1,8 +1,4 @@
 <?php
-// TODO Remove these!
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
 /**
  * Escape any characters that could facilitate an XSS attack vector.
  *
