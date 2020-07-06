@@ -8,7 +8,7 @@
     // Ensure all required info was given
     $required_info = [
       'cast_crew', 'description', 'genres',
-      'language', 'length', 'links',
+      'language', 'runtime', 'links',
       'release_date', 'sex', 'title',
       'user_id', 'violence'
     ];
