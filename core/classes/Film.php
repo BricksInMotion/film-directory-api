@@ -116,6 +116,7 @@ class Film {
    * @return {stdClass}
    */
   function rating() {
+    // TODO Have way to return individual vote info
     require '../core/database.php';
     $stmt = $pdo->prepare(get_sql('film-rating'));
     $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
