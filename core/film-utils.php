@@ -61,5 +61,9 @@
       $film_advisories['sex'],
       $film_advisories['language'],
       $film_advisories['violence']
+    ) && (
+      $film_advisories['sex'] >= 0 &&
+      $film_advisories['language'] >= 0 &&
+      $film_advisories['violence'] >= 0
     );
   }
