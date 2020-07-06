@@ -50,12 +50,40 @@ class Film {
       }
 
       // Record who all was involved in the film's creation
-      // $stmt = $pdo->prepare(get_sql('film-create-cast-crew'));
+      $stmt = $pdo->prepare(get_sql('film-create-cast-crew'));
+      foreach ($film_info['cast_crew'] as $i => $person) {
+        $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+        $stmt->bindValue(':role_id', $person['role_id'], PDO::PARAM_INT);
 
-      // Finally, save everything
+        // Handle member attribution differences depending of if we have a user ID
+        if ($person['user_id'] === 0) {
+          $stmt->bindValue(':user_id', null, PDO::PARAM_NULL);
+          $stmt->bindValue(':user_name', $person['user_name'], PDO::PARAM_STR);
+        } else {
+          $stmt->bindValue(':user_id', $person['user_id'], PDO::PARAM_INT);
+          $stmt->bindValue(':user_name', null, PDO::PARAM_NULL);
+        }
+
+        // if (in_array($person['role_id'], [8, 10])) {
+
+        // } else {
+
+        // }
+
+        // Handle a present/missing role title/desc. This occurrs when the
+        // Other Crew or VA role is present
+        if (trim($person['description'])) {
+          $stmt->bindValue(':description', $person['description'], PDO::PARAM_STR);
+        } else {
+          $stmt->bindValue(':description', null, PDO::PARAM_NULL);
+        }
+
+        // Record this cast member
+        $stmt->execute();
+      }
+
+      // Finally, save _everything_
       $pdo->commit();
-
-      // Record the film's ID
       return true;
 
       // There was an error in recording the film
