@@ -84,7 +84,7 @@ class Film {
       // TODO The error should be logged to file
     } catch(Exception $exc) {
       $pdo->rollback();
-      echo $exc->getMessage();
+      // echo $exc->getMessage();
       return false;
     }
   }
