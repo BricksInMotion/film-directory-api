@@ -24,6 +24,7 @@
   $prop_methods = [
     'links'      => 'links',
     'genres'     => 'genres',
+    'honors'     => 'honors',
     'reviews'    => 'reviews',
     'cast_crew'  => 'cast_crew',
     'advisories' => 'advisories',
