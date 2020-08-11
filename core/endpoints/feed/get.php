@@ -42,7 +42,7 @@
 
     // Create the recommended Atom tags
     $atom_link_tag = $xml->createElement('atom:link');
-    $atom_link_tag->setAttribute('href', "{$_SERVER['REQUEST_SCHEME']}://{$_SERVER['SERVER_ADDR']}{$_SERVER['REQUEST_URI']}");
+    $atom_link_tag->setAttribute('href', "https://api.bricksinmotion.com/{$_SERVER['REQUEST_URI']}");
     $atom_link_tag->setAttribute('rel', 'self');
     $atom_link_tag->setAttribute('type', 'application/rss+xml');
     $channel_tag->appendChild($atom_link_tag);
