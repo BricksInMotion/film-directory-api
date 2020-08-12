@@ -32,6 +32,7 @@
   function rss() {
     // Get the film data
     $film_data = get_data($is_rss=true);
+    $images_path = get_json('../.login/paths.json')["images"];
 
     // Create the root tags
     $xml = new DOMDocument('1.0', 'UTF-8');
@@ -62,14 +63,34 @@
       $item_tag = $xml->createElement('item');
       $guid_tag = $xml->createElement('guid', "https://bricksinmotion.com/films/view/{$film->id}/");
       $item_tag->appendChild($guid_tag);
+
       $title_tag = $xml->createElement('title', $film->title);
       $item_tag->appendChild($title_tag);
+
       $link_tag = $xml->createElement('link', "https://bricksinmotion.com/films/view/{$film->id}/");
       $item_tag->appendChild($link_tag);
+
       $pubdate_tag = $xml->createElement('pubDate', (new DateTime($film->date))->format('r'));
       $item_tag->appendChild($pubdate_tag);
+
+      // Construct the url and elements for the film thumbnail
+      $thumbnail_url = "https://bricksinmotion.com/films/images/{$film->thumbnail}";
+      $img_tag = $xml->createElement('img');
+      $img_tag->setAttribute('src', $thumbnail_url);
+      $img_tag_html = (string) $xml->saveXML($img_tag);
+      $text_tag = $xml->createTextNode($img_tag_html);
+
+      // Create the description tag, putting the HTML image tag in it
       $desc_tag = $xml->createElement('description', $film->description);
+      $desc_tag->appendChild($text_tag);
       $item_tag->appendChild($desc_tag);
+
+      // Create an enclosure tag for possible image displaying
+      $enclosure_tag = $xml->createElement('enclosure');
+      $enclosure_tag->setAttribute('url', $thumbnail_url);
+      $enclosure_tag->setAttribute('length', filesize("{$images_path}/{$film->thumbnail}"));
+      $enclosure_tag->setAttribute('type', 'image/jpeg');
+      $item_tag->appendChild($enclosure_tag);
       $channel_tag->appendChild($item_tag);
     }
 
