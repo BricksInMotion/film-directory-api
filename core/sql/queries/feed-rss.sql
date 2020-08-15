@@ -1,7 +1,7 @@
 SELECT films.id,
   films.title,
   films.img_thumb AS thumbnail,
-  films.date_create AS `date`,
+  films.date_post AS `date`,
   films.user_desc AS `description`,
   films.user_id,
   forums_users.username AS `user_name`
