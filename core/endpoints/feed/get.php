@@ -91,7 +91,7 @@
 
     // Get a string verson of the document
     $data = (string) $xml->saveXML();
-    return make_response(200, $data, $headers=null, $is_xml=true);
+    return make_response(200, $data, $headers=null, $format='xml');
   }
 
   // An RSS feed has been requested

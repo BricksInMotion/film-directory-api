@@ -40,20 +40,22 @@ function get_sql($script_name) {
 /**
  * Construct an error endpoint response.
  */
-function make_error_response($code, $msg, $headers=null, $is_xml=false) {
-  make_response($code, ['message' => $msg], $headers, $is_xml);
+function make_error_response($code, $msg, $headers=null, $format='json') {
+  make_response($code, ['message' => $msg], $headers, $format);
 }
 
 
 /**
  * Construct a non-error endpoint response.
  */
-function make_response($code, $data=null, $headers=null, $is_xml=false) {
+function make_response($code, $data=null, $headers=null, $format='json') {
   http_response_code($code);
 
   // Return the proper content type
-  if ($is_xml) {
+  if ($format === 'xml') {
     header('Content-Type: application/xml; charset=UTF-8');
+  } else if ($format === 'html') {
+    header('Content-Type: text/html; charset=UTF-8');
   } else {
     header('Content-Type: application/json');
   }
@@ -67,8 +69,7 @@ function make_response($code, $data=null, $headers=null, $is_xml=false) {
 
   // Only send data if needed
   if ($data !== null) {
-    $data = $is_xml ? $data : json_encode($data);
-    echo $data;
+    echo $format === 'json' ? json_encode($data) : $data;
   }
   exit();
 }
