@@ -81,7 +81,6 @@ class Film {
       return true;
 
       // There was an error in recording the film
-      // TODO The error should be logged to file
     } catch(Exception $exc) {
       $pdo->rollback();
       write_to_log($exc->getMessage());

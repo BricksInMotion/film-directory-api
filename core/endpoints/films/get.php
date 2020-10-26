@@ -87,15 +87,52 @@
 
 
   function json() {
-    $data = get_data();
-    if ($data['success']) {
-      return make_response($data['code'], $data['info']);
+    $film_data = get_data();
+    if ($film_data['success']) {
+      return make_response($film_data['code'], $film_data['info']);
     }
-    return make_error_response($data['code'], $data['info']);
+    return make_error_response($film_data['code'], $film_data['info']);
   }
 
 
-  function html() {}
+  function html() {
+    // Get the base film data
+    $film_data = get_data()['info'];
+
+    // Create the HTML fragment
+    $html = new DOMDocument();
+    $root = $html->createElement('div');
+    $root->setAttribute('class', 'film-card');
+    $root->setAttribute('id', "film-card-{$film_data->id}");
+
+    // Add the film title
+    $title = $html->createElement('h2', $film_data->title);
+    $title->setAttribute('class', 'title');
+    $root->appendChild($title);
+
+    // Add the film release date
+    $the_time = new DateTime($film_data->release_date);
+    $release_date = $html->createElement('time', $the_time->format('M d, Y'));
+    $release_date->setAttribute('class', 'release');
+    $release_date->setAttribute('datetime', $the_time->format('Y-m-d'));
+    $root->appendChild($release_date);
+
+    // Add the film run time
+    // TODO Format the run time properly
+    $runtime = $html->createElement('p', $film_data->runtime);
+    $runtime->setAttribute('class', 'runtime');
+    $root->appendChild($runtime);
+
+    // Add the film description
+    $description = $html->createElement('p', $film_data->description);
+    $description->setAttribute('class', 'description');
+    $root->appendChild($description);
+
+    // Get a string verson of the document
+    $html->appendChild($root);
+    $data = (string) $html->saveHTML();
+    return make_response(200, $data, $headers=null, $format='html');
+  }
 
 
   // An HTML card has been requested
