@@ -20,11 +20,11 @@
   }
 
   // A list of film years is requested
-  if (isset($_GET['all_years']) && strtolower(escape_xss($_GET['all_years'])) === 'true') {
+  if (isset($_GET['year']) && strtolower(escape_xss($_GET['year'])) === 'all') {
     echo make_response(200, get_years());
 
   // A basic list of films for a given year is requested
-  } else if (isset($_GET['year']) && escape_xss($_GET['year']) !== 4) {
+  } else if (isset($_GET['year']) && strlen(escape_xss($_GET['year'])) === 4) {
     $year = escape_xss($_GET['year']);
     echo make_response(200, get_films_in_year($year));
   }
