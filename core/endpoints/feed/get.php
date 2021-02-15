@@ -76,6 +76,9 @@
       $desc_tag = $xml->createElement('description', $film->description);
       $item_tag->appendChild($desc_tag);
 
+      $creator_tag = $xml->createElement('dc:creator', $film->user_name);
+      $item_tag->appendChild($creator_tag);
+
       // Create an enclosure tag for the film thumbnail
       $enclosure_tag = $xml->createElement('enclosure');
       $enclosure_tag->setAttribute('url', "https://bricksinmotion.com/films/images/{$film->thumbnail}");
