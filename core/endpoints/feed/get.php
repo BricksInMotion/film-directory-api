@@ -38,7 +38,8 @@
     $xml = new DOMDocument('1.0', 'UTF-8');
     $rss_tag = $xml->createElement('rss');
     $rss_tag->setAttribute('version', '2.0');
-    $rss_tag->setAttribute('xmlns:atom', 'http://www.w3.org/2005/Atom');
+    // $rss_tag->setAttribute('xmlns:atom', 'http://www.w3.org/2005/Atom');
+    $rss_tag->setAttribute('xmlns:atom', 'http://purl.org/dc/elements/1.1/');
     $channel_tag = $xml->createElement('channel');
 
     // Create the recommended Atom tags
