@@ -65,7 +65,7 @@
       $guid_tag = $xml->createElement('guid', "https://bricksinmotion.com/films/view/{$film->id}/");
       $item_tag->appendChild($guid_tag);
 
-      $title_tag = $xml->createElement('title', $film->title);
+      $title_tag = $xml->createElement('title', htmlentities($film->title));
       $item_tag->appendChild($title_tag);
 
       $link_tag = $xml->createElement('link', "https://bricksinmotion.com/films/view/{$film->id}/");
